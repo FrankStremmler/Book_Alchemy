@@ -7,10 +7,32 @@
   </head>
   <body>
 
-    {% for book in books %}
-    <div> <h3>{{ book.title }}</h3>
+    <h1>🏡 Willkommen in der Bibliothek</h1>
+    
+    <div class="book-container">
+        {% for book in books %}
+        <div class="book-card">
+            <!-- Cover-Bild von Open Library API -->
+            <img class="book-cover" 
+                 src="https://openlibrary.org{{ book.isbn }}-M.jpg" 
+                 alt="Cover für {{ book.title }}">
+            
+            <h3>{{ book.title }}</h3>
+            
+            <!-- Zugriff auf den Autorennamen über die Beziehung -->
+            <p><strong>Autor:</strong> {{ book.author.name }}</p>
+            
+            <p><small>Erschienen: {{ book.publication_year }}</small></p>
+            <p><small>ISBN: {{ book.isbn }}</small></p>
+        </div>
+        {% else %}
+        <p>Noch keine Bücher in der Datenbank vorhanden.</p>
+        {% endfor %}
     </div>
-    {% endfor %}
 
+    <br>
+    <a href="{{ url_for('add_author') }}">Neuen Autor anlegen</a> | 
+    <a href="{{ url_for('add_book') }}">Neues Buch anlegen</a>
+</body>
   </body>
 </html>

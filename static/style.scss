@@ -1,0 +1,58 @@
+.flash-success { 
+    color: white; 
+    background-color: green; 
+    padding: 10px; 
+    margin-bottom: 10px; 
+}
+
+.flash-error { 
+    color: white; 
+    background-color: red; 
+    padding: 10px; 
+    margin-bottom: 10px; 
+}
+
+.book-grid {
+    display: flex;          /* Aktiviert Flexbox */
+    flex-wrap: wrap;        /* Erlaubt Zeilenumbruch, wenn der Platz nicht reicht */
+    gap: 25px;              /* Abstand zwischen den Karten */
+    justify-content: center; /* Zentriert die Karten im Fenster */
+    padding: 20px;
+}
+
+.book-card {
+    flex: 0 1 220px;        /* Die Karte ist ca. 220px breit, schrumpft aber bei Bedarf */
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s; /* Kleiner Effekt beim Drüberfahren */
+}
+
+.book-card:hover {
+    transform: translateY(-5px); /* Karte hebt sich leicht an */
+}
+
+.book-cover {
+    width: 100%;            /* Nutzt die volle Breite der Karte */
+    height: 280px;          /* Einheitliche Höhe für alle Cover */
+    object-fit: contain;    /* Bild wird nicht verzerrt, sondern eingepasst */
+    background-color: #eee;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+.book-title {
+    font-size: 1.1em;
+    margin: 10px 0 5px 0;
+    color: #333;
+}
+
+.author-name {
+    color: #666;
+    font-style: italic;
+    margin-bottom: 15px;
+}
+
