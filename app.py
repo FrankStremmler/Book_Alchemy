@@ -72,7 +72,8 @@ def add_author():
         new_author = Author()
         new_author.name = name
         new_author.birth_date = birth_date
-        new_author.year_of_death = year_of_death if year_of_death else str(date.min.year)
+        new_author.year_of_death = year_of_death if year_of_death else None
+
 
         try:
             print("Try add")
@@ -91,26 +92,25 @@ def add_author():
     return render_template("add_author.html")
 
 # ADD_BOOK
-@app.route("/add_book")
+@app.route("/add_book", methods=("GET", "POST"))
 def add_book():
-    authors = db.session.execute(db.select(Author).order_by(Author.name)).scalars().all()
 
     if request.method == "POST":
         title = request.form.get("title")
         author_id = request.form.get("author_id")
         isbn = request.form.get("isbn")
-        year = request.form.get("publication_year")
+        publication_year = request.form.get("publication_year")
 
-        if not author_id or not isbn or not year:
+        if not title or not author_id or not isbn or not publication_year:
             flash("Bitte fülle alle Felder aus!", "error")
             return redirect(url_for('add_book'))
 
         try:
             new_book = Book()
             new_book.title = title
-            new_book.author_id = int(selected_author_id)
+            new_book.author_id = int(author_id)
             new_book.isbn = isbn
-            new_book.publication_year = year
+            new_book.publication_year = publication_year
 
             db.session.add(new_book)
             db.session.commit()
@@ -122,9 +122,8 @@ def add_book():
 
         return redirect(url_for('add_book'))
 
+    authors = db.session.execute(db.select(Author).order_by(Author.name)).scalars().all()
     return render_template("add_book.html", authors=authors)
-
-from flask import flash, redirect, url_for
 
 # DELET EBOOK
 @app.route("/book/<int:book_id>/delete", methods=["POST"])

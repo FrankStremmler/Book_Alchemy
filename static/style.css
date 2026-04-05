@@ -12,6 +12,14 @@
 }
 
 /* Buttons Definition */
+/* Standard Button */
+.btn {
+  background-color: blue;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
 .delete-btn {
   position: absolute;
   top: 10px;
@@ -45,14 +53,22 @@
   margin: 0 5px;
   border: 1px solid #3498db;
   border-radius: 20px;
-  color: #3498db;
+  background-color: transparent;
+  color: black;
   font-size: 0.9rem;
   transition: all 0.3s;
 }
 
-.sort-controls .btn:hover, .sort-controls .btn.active {
+.sort-controls .btn.active {
+  background-color: blue;
+  color: white;
+}
+
+.sort-controls .btn:hover {
   background-color: #3498db;
   color: white;
+  background-color: darkblue;
+  border: 1px solid blue;
 }
 
 /* Message via flash */
