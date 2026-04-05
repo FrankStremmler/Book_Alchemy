@@ -11,8 +11,12 @@
   transition: transform 0.3s;
 }
 
+/* Buttons Definition */
 .delete-btn {
-  background: white;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: white;
   border: #555;
   border-radius: 5px;
   border-spacing: 5px;
@@ -27,7 +31,6 @@
   transform: scale(1.3);
 }
 
-/* Optional: Ein Button-Stil für eine Autorenliste */
 .btn-danger {
   background-color: #e74c3c;
   color: white;
@@ -52,6 +55,7 @@
   color: white;
 }
 
+/* Message via flash */
 .flash-success {
   color: white;
   background-color: rgb(195, 210, 195);
@@ -66,7 +70,7 @@
   margin-bottom: 10px;
 }
 
-/* Der äußere Container bleibt ein Grid */
+/* Outer book-Container */
 .book-container {
   display: flex;
   flex-direction: column; /* Karten untereinander */
@@ -75,20 +79,21 @@
   padding: 20px;
 }
 
-/* Die einzelne Buch-Karte (jetzt im Querformat) */
+/* Each Book as a Card */
 .book-card {
+  position: relative;
   display: flex; /* Aktiviert Flexbox für den Inhalt der Karte */
   flex-direction: row; /* Bild links, Text rechts */
   width: 100%;
   max-width: 800px; /* Verhindert, dass die Karte zu breit wird */
-  background: #dddddc;
+  background: wheat;
   border: 1px solid #ddd;
   border-radius: 12px;
   overflow: hidden; /* Damit das Bild an den Ecken abgerundet ist */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-/* Linke Seite: Das Cover */
+/* Bookcover */
 .book-cover-wrapper {
   flex: 0 0 180px; /* Feste Breite für das Bild-Segment */
   background-color: #f8f8f8;
@@ -102,7 +107,7 @@
   display: block;
 }
 
-/* Rechte Seite: Die Daten-Spalte */
+/* Bookdata */
 .book-content {
   flex: 1; /* Nimmt den restlichen Platz ein */
   padding: 20px;
@@ -112,15 +117,23 @@
 }
 
 .book-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 1.4rem;
   font-weight: bold;
   margin: 0 0 5px 0;
-  color: #2c3e50;
+  color: #0e569d;
+}
+
+.book-title form {
+  display: inline-flex;
+  margin: 10px;
 }
 
 .book-author {
   font-size: 1.1rem;
-  color: #e67e22; /* Akzentfarbe für den Autor */
+  color: black;
   margin-bottom: 15px;
 }
 
@@ -142,5 +155,5 @@
   border-top: 1px solid #eee;
   padding-top: 10px;
   display: flex;
-  justify-content: space-between; /* ISBN links, Jahr rechts */
+  justify-content: space-between;
 }/*# sourceMappingURL=style.css.map */

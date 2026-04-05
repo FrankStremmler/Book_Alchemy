@@ -58,26 +58,26 @@
             
             <div class="book-content">
                 <div class="book-title">{{ book.title }}</div>
+                <form action="{{ url_for('delete_book', book_id=book.id) }}" 
+                      method="POST" 
+                      style="display:inline;"
+                      onsubmit="return confirm('{{ book.title | upper }} von {{ book.author.name }} \nMöchtest du dieses Buch wirklich löschen?');">
+                    <button type="submit" class="delete-btn">🗑️</button>
+                </form>
+                
                 <div class="book-author">von {{ book.author.name }}</div>
-                    <form action="{{ url_for('delete_book', book_id=book.id) }}" 
-                          method="POST" 
-                          style="display:inline;"
-                          onsubmit="return confirm('{{ book.title | upper }} von {{ book.author.name }} \nMöchtest du dieses Buch wirklich löschen?');">
-                        <button type="submit" class="delete-btn">🗑️</button>
-                    </form>
-
                 
                 <div class="book-summary">
                     {{ book.summary if book.summary else "Keine Beschreibung verfügbar." }}
                 </div>
                 
                 <div class="book-footer">
-                    <span>ISBN: {{ book.isbn }}</span>
                     <span>Erschienen: {{ book.publication_year }}</span>
+                    <span>ISBN: {{ book.isbn }}</span>
                 </div>
             </div>
         </div>
         {% endfor %}
       </div>
-  </body>
+ </body>
 </html>
