@@ -165,7 +165,7 @@ def get_book_details(isbn):
     return None
 
 def main():
-    app.run(debug=True, use_reloader=True, host='127.0.0.1', port=5000)
+    app.run(debug=True, use_reloader=True)
 
 
 if __name__ == '__main__':
