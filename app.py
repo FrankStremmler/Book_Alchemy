@@ -165,7 +165,7 @@ def get_book_details(isbn):
     return None
 
 def main():
-    app.run(debug=True, use_reloader=True)
+    app.run()
 
 
 if __name__ == '__main__':
