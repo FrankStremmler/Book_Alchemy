@@ -16,28 +16,59 @@ app.config['SECRET_KEY'] = "secret"
 
 db.init_app(app)
 
-
+#############################
 # Routes for Flask
+# HOME
 @app.route("/")
 def home():
-    books = db.session.execute(db.select(Book)).scalars().all()
-    print(books )
-    return render_template('home.html', books=books)
 
+    search_query = request.args.get('q', '').strip()
+    sort_param = request.args.get('sort', 'title')
+
+    stmt = db.select(Book).join(Author)
+
+    if search_query:
+        stmt = stmt.where(
+            db.or_(
+                Book.title.icontains(search_query),
+                Author.name.icontains(search_query)
+            )
+        )
+
+    if sort_param == 'author':
+        stmt = stmt.order_by(Author.name)
+    else:
+        stmt = stmt.order_by(Book.title)
+
+    query = db.select(Book).join(Author)
+
+    if sort_param == 'author':
+        query = query.order_by(Author.name)
+    elif sort_param == 'year':
+        query = query.order_by(Book.publication_year.desc())
+    else:
+        query = query.order_by(Book.title)
+
+    books = db.session.execute(stmt).scalars().all()
+
+    return render_template('home.html',
+                            books=books,
+                            search_query=search_query,
+                            current_sort=sort_param)
+
+# ADD_author
 @app.route("/add_author", methods=["GET", "POST"])
 def add_author():
     if request.method == "POST":
-        # Daten aus dem Formular abrufen
+
         name = request.form.get("name")
         birth_date = request.form.get("birthdate")
         year_of_death = request.form.get("date_of_death")
 
-        # Validierung (einfaches Beispiel)
         if not name or not birth_date:
             flash("Name und Geburtsdatum sind erforderlich!", "error")
             return redirect(url_for('add_author'))
 
-        # Neuen Autor-Datensatz erstellen
         new_author = Author()
         new_author.name = name
         new_author.birth_date = birth_date
@@ -57,9 +88,9 @@ def add_author():
 
         return redirect(url_for('add_author'))
 
-    # Bei GET-Request: Formular anzeigen
     return render_template("add_author.html")
 
+# ADD_BOOK
 @app.route("/add_book")
 def add_book():
     authors = db.session.execute(db.select(Author).order_by(Author.name)).scalars().all()
@@ -93,6 +124,46 @@ def add_book():
 
     return render_template("add_book.html", authors=authors)
 
+from flask import flash, redirect, url_for
+
+# DELET EBOOK
+@app.route("/book/<int:book_id>/delete", methods=["POST"])
+def delete_book(book_id):
+    book = db.session.get(Book, book_id)
+    if book:
+        title = book.title
+        db.session.delete(book)
+        db.session.commit()
+        flash(f"Das Buch '{title}' wurde gelöscht.", "success")
+    return redirect(url_for('home'))
+
+# DELETE AUTHOR
+@app.route("/author/<int:author_id>/delete", methods=["POST"])
+def delete_author(author_id):
+    author = db.session.get(Author, author_id)
+    if author:
+        # Prüfung: Hat der Autor noch Bücher?
+        if author.books:
+            flash(f"Fehler: '{author.name}' kann nicht gelöscht werden, da noch Bücher von ihm existieren.", "error")
+        else:
+            name = author.name
+            db.session.delete(author)
+            db.session.commit()
+            flash(f"Autor '{name}' wurde gelöscht.", "success")
+    return redirect(url_for('home'))
+
+#############################
+# Python
+def get_book_details(isbn):
+    url = f"https://googleapis.com:{isbn}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        if "items" in data:
+            # Holt den Link zum Vorschaubild (thumbnail)
+            image_links = data["items"][0]["volumeInfo"].get("imageLinks", {})
+            return image_links.get("thumbnail")
+    return None
 
 def main():
     app.run(debug=True, use_reloader=True, host='127.0.0.1', port=5000)
@@ -101,6 +172,4 @@ def main():
 if __name__ == '__main__':
     main()
 
-# with app.app_context():
-#     db.create_all()
 

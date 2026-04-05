@@ -1,38 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  </head>
-  <body>
+    <head>
+      <title>Bibliothek</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
 
     <h1>🏡 Willkommen in der Bibliothek</h1>
-    
-    <div class="book-container">
+      <br>
+      <div class="sort-controls" style="margin: 20px; text-align: center;">
+        <a href="{{ url_for('add_author') }}"class="btn">Neuen Autor anlegen</a>  
+        <a href="{{ url_for('add_book') }}" class="btn">Neues Buch anlegen</a>
+      </div>
+      <br>    
+      <div class="search-bar" style="text-align: center; margin-bottom: 20px;">
+          <form action="{{ url_for('home') }}" method="GET">
+              <!-- Wir müssen den aktuellen Sortierstatus als verstecktes Feld mitgeben -->
+              <input type="hidden" name="sort" value="{{ current_sort }}">
+              
+              <input type="text" name="q" value="{{ search_query }}" 
+                    placeholder="Titel oder Autor..." 
+                    style="padding: 10px; width: 300px; border-radius: 20px; border: 1px solid #ddd;">
+              
+              <button type="submit" class="btn active">Suchen</button>
+              
+              {% if search_query %}
+                  <a href="{{ url_for('home') }}" style="font-size: 0.8rem; color: red;">Suche löschen</a>
+              {% endif %}
+          </form>
+      </div>
+
+      <div class="sort-controls" style="margin: 20px; text-align: center;">
+          <span>Sortieren nach:</span>
+          <a href="{{ url_for('home', sort='title') }}" 
+            class="btn {{ 'active' if current_sort == 'title' }}">🔤 Titel</a>
+          
+          <a href="{{ url_for('home', sort='author') }}" 
+            class="btn {{ 'active' if current_sort == 'author' }}">👤 Autor</a>
+          
+          <a href="{{ url_for('home', sort='year') }}" 
+            class="btn {{ 'active' if current_sort == 'year' }}">📅 Jahr</a>
+      </div>
+      <br>
+      <div class="book-container">
         {% for book in books %}
         <div class="book-card">
-            <!-- Cover-Bild von Open Library API -->
-            <img class="book-cover" 
-                 src="https://openlibrary.org{{ book.isbn }}-M.jpg" 
-                 alt="Cover für {{ book.title }}">
+            <!-- Linker Teil: Cover -->
+            <div class="book-cover-wrapper">
+                <img class="book-cover" 
+                    src="https://openlibrary.org/?q=isbn{{ book.isbn }}-M.jpg" 
+                    onerror="this.src='https://google.com/books/content?id={{ book.isbn }}&printsec=frontcover&img=1&zoom=1';" 
+                    alt="Cover">
+            </div>
             
-            <h3>{{ book.title }}</h3>
-            
-            <!-- Zugriff auf den Autorennamen über die Beziehung -->
-            <p><strong>Autor:</strong> {{ book.author.name }}</p>
-            
-            <p><small>Erschienen: {{ book.publication_year }}</small></p>
-            <p><small>ISBN: {{ book.isbn }}</small></p>
-        </div>
-        {% else %}
-        <p>Noch keine Bücher in der Datenbank vorhanden.</p>
-        {% endfor %}
-    </div>
+            <div class="book-content">
+                <div class="book-title">{{ book.title }}</div>
+                <div class="book-author">von {{ book.author.name }}</div>
+                    <form action="{{ url_for('delete_book', book_id=book.id) }}" 
+                          method="POST" 
+                          style="display:inline;"
+                          onsubmit="return confirm('{{ book.title | upper }} von {{ book.author.name }} \nMöchtest du dieses Buch wirklich löschen?');">
+                        <button type="submit" class="delete-btn">🗑️</button>
+                    </form>
 
-    <br>
-    <a href="{{ url_for('add_author') }}">Neuen Autor anlegen</a> | 
-    <a href="{{ url_for('add_book') }}">Neues Buch anlegen</a>
-</body>
+                
+                <div class="book-summary">
+                    {{ book.summary if book.summary else "Keine Beschreibung verfügbar." }}
+                </div>
+                
+                <div class="book-footer">
+                    <span>ISBN: {{ book.isbn }}</span>
+                    <span>Erschienen: {{ book.publication_year }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+      </div>
   </body>
 </html>

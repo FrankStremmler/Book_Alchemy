@@ -1,7 +1,60 @@
 @charset "UTF-8";
+.body {
+  background-color: #d9dbd2;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: row;
+  flex-flow: wrap;
+  transition: transform 0.3s;
+}
+
+.delete-btn {
+  background: white;
+  border: #555;
+  border-radius: 5px;
+  border-spacing: 5px;
+  color: #e74c3c;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 5px 5px;
+  transition: transform 0.2s;
+}
+
+.delete-btn:hover {
+  transform: scale(1.3);
+}
+
+/* Optional: Ein Button-Stil für eine Autorenliste */
+.btn-danger {
+  background-color: #e74c3c;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.sort-controls .btn {
+  text-decoration: none;
+  padding: 8px 15px;
+  margin: 0 5px;
+  border: 1px solid #3498db;
+  border-radius: 20px;
+  color: #3498db;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+}
+
+.sort-controls .btn:hover, .sort-controls .btn.active {
+  background-color: #3498db;
+  color: white;
+}
+
 .flash-success {
   color: white;
-  background-color: green;
+  background-color: rgb(195, 210, 195);
   padding: 10px;
   margin-bottom: 10px;
 }
@@ -13,47 +66,81 @@
   margin-bottom: 10px;
 }
 
-.book-grid {
-  display: flex; /* Aktiviert Flexbox */
-  flex-wrap: wrap; /* Erlaubt Zeilenumbruch, wenn der Platz nicht reicht */
-  gap: 25px; /* Abstand zwischen den Karten */
-  justify-content: center; /* Zentriert die Karten im Fenster */
+/* Der äußere Container bleibt ein Grid */
+.book-container {
+  display: flex;
+  flex-direction: column; /* Karten untereinander */
+  align-items: center; /* Zentriert die Karten in der Mitte */
+  gap: 20px;
   padding: 20px;
 }
 
+/* Die einzelne Buch-Karte (jetzt im Querformat) */
 .book-card {
-  flex: 0 1 220px; /* Die Karte ist ca. 220px breit, schrumpft aber bei Bedarf */
-  background: #f9f9f9;
+  display: flex; /* Aktiviert Flexbox für den Inhalt der Karte */
+  flex-direction: row; /* Bild links, Text rechts */
+  width: 100%;
+  max-width: 800px; /* Verhindert, dass die Karte zu breit wird */
+  background: #dddddc;
   border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 15px;
-  text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s; /* Kleiner Effekt beim Drüberfahren */
+  border-radius: 12px;
+  overflow: hidden; /* Damit das Bild an den Ecken abgerundet ist */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-.book-card:hover {
-  transform: translateY(-5px); /* Karte hebt sich leicht an */
+/* Linke Seite: Das Cover */
+.book-cover-wrapper {
+  flex: 0 0 180px; /* Feste Breite für das Bild-Segment */
+  background-color: #f8f8f8;
 }
 
 .book-cover {
-  width: 100%; /* Nutzt die volle Breite der Karte */
-  height: 280px; /* Einheitliche Höhe für alle Cover */
-  -o-object-fit: contain;
-     object-fit: contain; /* Bild wird nicht verzerrt, sondern eingepasst */
-  background-color: #eee;
-  margin-bottom: 10px;
-  border-radius: 4px;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover; /* Bild füllt den Bereich aus */
+  display: block;
+}
+
+/* Rechte Seite: Die Daten-Spalte */
+.book-content {
+  flex: 1; /* Nimmt den restlichen Platz ein */
+  padding: 20px;
+  display: flex;
+  flex-direction: column; /* Daten untereinander stapeln */
+  justify-content: center; /* Vertikal zentrieren */
 }
 
 .book-title {
-  font-size: 1.1em;
-  margin: 10px 0 5px 0;
-  color: #333;
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin: 0 0 5px 0;
+  color: #2c3e50;
 }
 
-.author-name {
-  color: #666;
-  font-style: italic;
+.book-author {
+  font-size: 1.1rem;
+  color: #e67e22; /* Akzentfarbe für den Autor */
   margin-bottom: 15px;
+}
+
+.book-summary {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.5;
+  margin-bottom: 15px;
+  /* Optional: Begrenzung auf 4 Zeilen */
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.book-footer {
+  font-size: 0.85rem;
+  color: #999;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+  display: flex;
+  justify-content: space-between; /* ISBN links, Jahr rechts */
 }/*# sourceMappingURL=style.css.map */
